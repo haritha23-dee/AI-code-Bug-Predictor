@@ -1,0 +1,9 @@
+fastapi
+pydantic
+pydantic[email]
+pydantic[dotenv]
+pydantic-settings
+supabase
+groq
+uvicorn[standard]
+python-multipart
