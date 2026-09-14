@@ -13,13 +13,13 @@ def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(bearer_
     try:
         user_response = client.auth.get_user(token)
     except Exception as e:
-        raise HTTPException(401, "Invalid or expired token")
+        raise HTTPException(401, f"Invalid or expired token: {str(e)}")
 
     client.postgrest.auth(token)
     try: 
         profile = client.table("profiles").select("role").eq("id", user_response.user.id).single().execute()
     except Exception as e:
-        raise HTTPException(404, "Profile not found" )
+        raise HTTPException(404, f"Profile not found: {str(e)}" )
 
     return {"id": user_response.user.id, "token":token, "role": profile.data["role"]}
 
