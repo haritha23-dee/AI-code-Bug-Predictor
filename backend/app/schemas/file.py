@@ -15,3 +15,18 @@ class FilePasteCreate(BaseModel):
         if not self.original_code.strip():
             raise ValueError("original_code cannot be empty")
         return self
+
+EXTENSION_MAP = {
+    "html": "html", 
+    "css": "css",
+    "r": "r",
+    "py": "python",
+    "c" : "c",
+    "cpp" : "cpp",
+    "cc" : "cpp",
+    "h" : "cpp",
+    "java" : "java",
+    "js" : "javascript",
+    "jsx": "reactjs",
+    "tsx": "reactjs"
+}
