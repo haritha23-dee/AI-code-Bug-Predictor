@@ -1,15 +1,15 @@
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from fastapi import HTTPException, Header, Depends, APIRouter
 from supabase import create_client
 from jose import jwt, JWTError
 from app.config import settings
 
-def get_current_user(authorization: str = Header(...)) -> dict:
-    if not authorization.startswith("Bearer "):
-        raise HTTPException(401, "Missing or malformed authorization header")
-    token = authorization.removeprefix("Bearer ")
+bearer_scheme = HTTPBearer()
+
+def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)) -> dict:
+    token = credentials.credentials
 
     client = create_client(settings.supabase_url, settings.supabase_anon_key)
-
     try:
         user_response = client.auth.get_user(token)
     except Exception as e:

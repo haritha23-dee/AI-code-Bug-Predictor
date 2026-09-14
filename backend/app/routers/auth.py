@@ -17,9 +17,6 @@ def signup(payload: SignupRequest):
         })
     except Exception as e:
         raise HTTPException(400, f"signup failed:{str(e)}")
-
-    if response.session is None:
-        return {"Status": "confirmation_required", "message": "check your mail to confirm your account before logging in."}
     
     return {"status": "signed_in", "access_token": response.session.access_token, "user_id": response.user.id}
 
