@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from dependencies.roles import require_user
 from dependencies.supabase_client import get_user_supabase
 from app.schemas.project import ProjectCreate
+from uuid import UUID
 
 router = APIRouter(prefix="/projects", tags=["projects"])
 
@@ -21,14 +22,14 @@ def list_projects(user=Depends(require_user), db=Depends(get_user_supabase)):
     return result.data
 
 @router.get("/{project_id}")
-def get_project(project_id: str, user=Depends(require_user), db = Depends(get_user_supabase)):
+def get_project(project_id: UUID, user=Depends(require_user), db = Depends(get_user_supabase)):
     result = db.table("projects").select("*").eq("id", project_id).execute()
     if not result.data:
         raise HTTPException(404, "Project not found")
     return result.data[0]
 
 @router.delete("/{project_id}", status_code=204)
-def delete_project(project_id: str, user=Depends(require_user), db = Depends(get_user_supabase)):
+def delete_project(project_id: UUID, user=Depends(require_user), db = Depends(get_user_supabase)):
     result = db.table("projects").delete().eq("id", project_id).execute()
     if not result.data:
         raise HTTPException(404, "Project not found")

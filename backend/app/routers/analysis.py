@@ -4,11 +4,12 @@ from dependencies.supabase_client import get_user_supabase
 from app.services.groq_service import analyze_code
 from app.schemas.analysis import AnalysisResultResponse
 import json
+from uuid import UUID
 
 router = APIRouter(prefix="/files", tags=["analysis"])
 
 @router.post("/{file_id}/analyze", status_code=201, response_model=AnalysisResultResponse)
-def trigger_analysis(file_id: str, user=Depends(require_user), db=Depends(get_user_supabase)):
+def trigger_analysis(file_id: UUID, user=Depends(require_user), db=Depends(get_user_supabase)):
     file_row = db.table("project_files").select("*").eq("id", file_id).execute()
     if not file_row.data:
         raise HTTPException(404, "File not found")

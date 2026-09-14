@@ -1,11 +1,12 @@
 from pydantic import BaseModel, ConfigDict, model_validator
 from typing import Optional, Literal
+from uuid import UUID
 
 CodeLanguage = Literal["html", "css", "r", "python", "c", "cpp", "java", "javascript", "reactjs"]
 
 class FilePasteCreate(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    project_id: str
+    project_id: UUID
     language: CodeLanguage
     file_name: str
     original_code: str

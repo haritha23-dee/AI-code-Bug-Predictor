@@ -30,3 +30,19 @@ def login(payload: LoginRequest):
         raise HTTPException(401, "Invalid credentials")
 
     return {"access_token": response.session.access_token, "user_id": response.user.id}
+
+@router.post("/admin-login")
+def admin_login(payload: LoginRequest):
+    client = create_client(settings.supabase_url, settings.supabase_anon_key)
+    try:
+        response = client.auth.sign_in_with_password({"email": payload.email, "password": payload.password})
+    except Exception:
+        raise HTTPException(401, "Invalid credentials")
+
+    client.postgrest.auth(response.session.access_token)
+    profile = client.table("profiles").select("role").eq("id", response.user.id).single().execute()
+
+    if profile.data["role"] != "admin":
+        raise HTTPException(403, "Not an admin account")
+
+    return {"access_token": response.session.access_token, "user_id": response.user.id, "role": "admin"}
