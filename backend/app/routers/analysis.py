@@ -25,7 +25,7 @@ def trigger_analysis(file_id: UUID, user=Depends(require_user), db=Depends(get_u
         raise HTTPException(502, f"AI analysis failed: {e}")
 
     insert_payload = {
-        "file_id": file_id,
+        "file_id": str(file_id),
         "project_id": file_data["project_id"],
         "user_id": user["id"],
         "bug_severity": result_json.get("bug_severity"),
@@ -40,3 +40,28 @@ def trigger_analysis(file_id: UUID, user=Depends(require_user), db=Depends(get_u
 
     insert = db.table("analysis_results").insert(insert_payload).execute()
     return insert.data[0]
+
+@router.get("/{file_id}/analysis/latest")
+def get_latest_analysis(file_id: UUID, user=Depends(require_user), db=Depends(get_user_supabase)):
+    result = (
+        db.table("analysis_results")
+        .select("*")
+        .eq("file_id", str(file_id))
+        .order("created_at", desc=True)
+        .limit(1)
+        .execute()
+    )
+    if not result.data:
+        raise HTTPException(404, "No analysis found for this file")
+    return result.data[0]
+
+#full history
+@router.get("/{file_id}/analysis/history")
+def get_analysis_history(file_id: UUID, user=Depends(require_user), db=Depends(get_user_supabase)):
+    result = (
+        db.table("analysis_results")
+        .select("*")
+        .eq("file_id", str(file_id))
+        .order("created_at", desc=True)
+        .execute()
+    )
