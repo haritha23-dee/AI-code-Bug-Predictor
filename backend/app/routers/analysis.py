@@ -5,6 +5,9 @@ from app.services.groq_service import analyze_code
 from app.schemas.analysis import AnalysisResultResponse
 import json
 from uuid import UUID
+import logging
+
+logger = logging.getLogger("brainy")
 
 router = APIRouter(prefix="/files", tags=["analysis"])
 
@@ -18,6 +21,7 @@ def trigger_analysis(file_id: UUID, user=Depends(require_user), db=Depends(get_u
     try:
         result_json = json.loads(analyze_code(file_data["original_code"], file_data["language"]))
     except Exception as e:
+        logger.error(f"AI analysis failed for file {file_id}: {e}")
         raise HTTPException(502, f"AI analysis failed: {e}")
 
     insert_payload = {
