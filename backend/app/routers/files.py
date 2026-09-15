@@ -15,7 +15,7 @@ def upload_file(
     user=Depends(require_user),
     db=Depends(get_user_supabase),
 ):
-    project = db.table("projects").select("id").eq("id", project_id).execute()
+    project = db.table("projects").select("id").eq("id", str(project_id)).execute()
     if not project.data:
         raise HTTPException(404, "Project not found")
 
@@ -37,7 +37,7 @@ def upload_file(
     db.storage.from_("source-code").upload(storage_path, raw_bytes, {"content-type": "text/plain"})
 
     result = db.table("project_files").insert({
-        "project_id": project_id,
+        "project_id": str(project_id),
         "user_id": user["id"],
         "language": language,
         "file_name": file.filename,
@@ -48,12 +48,12 @@ def upload_file(
 
 @router.post("", status_code=201, tags=["files"])
 def create_pasted_file(payload: FilePasteCreate, user=Depends(require_user), db=Depends(get_user_supabase)):
-    project = db.table("projects").select("id").eq("id", payload.project_id).execute()
+    project = db.table("projects").select("id").eq("id", str(payload.project_id)).execute()
     if not project.data:
         raise HTTPException(404, "Project not found")
 
     result = db.table("project_files").insert({
-        "project_id": payload.project_id,
+        "project_id": str(payload.project_id),
         "user_id": user["id"],
         "language": payload.language,
         "file_name": payload.file_name,
@@ -63,19 +63,19 @@ def create_pasted_file(payload: FilePasteCreate, user=Depends(require_user), db=
 
 @router.get("/{file_id}")
 def get_file(file_id: UUID, user=Depends(require_user), db=Depends(get_user_supabase)):
-    result = db.table("project_files").select("*").eq("id", file_id).execute()
+    result = db.table("project_files").select("*").eq("id", str(file_id)).execute()
     if not result.data:
         raise HTTPException(404, "File not Found")
     return result.data[0]
 
 @router.get("/project/{project_id}")
 def list_files_for_project(project_id: UUID, user=Depends(require_user), db=Depends(get_user_supabase)):
-    result = db.table("project_files").select("*").eq("project_id", project_id).order("created_at", desc=True).execute()
+    result = db.table("project_files").select("*").eq("project_id", str(project_id)).order("created_at", desc=True).execute()
     return result.data
 
 @router.delete("/{file_id}", status_code=204)
 def delete_file(file_id: UUID, user=Depends(require_user), db=Depends(get_user_supabase)):
-    result = db.table("project_files").delete().eq("id", file_id).execute()
+    result = db.table("project_files").delete().eq("id", str(file_id)).execute()
     if not result.data:
         raise HTTPException(404, "Project not found")
     return None
