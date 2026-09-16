@@ -5,7 +5,7 @@ const AuthContext = createContext(null);
 
 export function AuthProvider( {children} ){
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() =>{
         const token = localStorage.getItem('scrs_token');
@@ -15,7 +15,7 @@ export function AuthProvider( {children} ){
         }
         authApi
             .getMe()
-            .then((res) => setUser(res.data.user || res.data))
+            .then((res) => setUser(res.data))
             .catch(() => localStorage.removeItem('scrs_token'))
             .finally(() => setLoading(false));
         }, []);
@@ -23,12 +23,14 @@ export function AuthProvider( {children} ){
         const login = async (email, password) => {
             try{
                 const res = await authApi.login(email, password);
-                const { token, user: loggedInUser } = res.data;
+                const { token, user: user_id } = res.data;
                 localStorage.setItem('scrs_token', token);
-                setUser(loggedInUser);
-                return loggedInUser;
+                const me = await authApi.getMe();
+                setUser(me.data);
+                return me.data;
             } catch (err){
-                throw new Error(err.response?.data?.message || 'Login failed');
+                localStorage.removeItem('scrs_token');
+                throw new Error(err.response?.data?.detail || 'Login failed');
             }
         };
 
@@ -37,11 +39,12 @@ export function AuthProvider( {children} ){
             setUser(null);
         };
 
-        const updateProfile = async(data) => {
-            const res = await authApi.updateProfile(data);
-            setUser(res.data.user || res.data);
-            return res.data;
-        };
+
+        // const updateProfile = async(data) => {
+        //     const res = await authApi.updateProfile(data);
+        //     setUser(res.data.user || res.data);
+        //     return res.data;
+        // };
 
         const value = useMemo(
             () => ({ user, setUser, loading, login, logout, updateProfile }),
@@ -57,6 +60,6 @@ export const useAuth = () => {
     const ctx = useContext(AuthContext);
     if (!ctx) throw new Error('useAuth must be used within AuthProvider');
     return ctx;
-}
+;}
 
 
