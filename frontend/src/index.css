@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "tailwindcss" ;
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root{
+  --bg: #f3f4f6; 
+  --bg-soft: #ffffff;
+  --border: #e5e7eb;
+  --text: #111827;
+  --text-muted: #55606e;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8; /* needs to put slightly darker than accent */
+  --glow: rgba(37,99, 235, 0.4);   /*blue glow*/
+}
+
+.dark {
+  --bg: #0d1117;
+  --bg-soft: #161b22;
+  --border: #30363d;
+  --text: #e6edf3;
+  --text-muted: #8b949e;
+  --accent: #3b83f6;
+  --accent-hover: #60a5fa;
+  --glow: rgba(59, 130, 246, 0.4);
+}
+
+@theme inline{
+  --color-bg: var(--bg);
+  --color-bg-soft: var(--bg-soft);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  transition: background-color 0.25s ease, color 0.25s ease;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.glass-card{
+  background: color-mix(in srgb, var(--bg-soft) 70% transparent);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(16px);
+}
+
+.ambient-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;  /*cursor meant? */
+  z-index: 0;
+  background:
+    radial-gradient(600px circle at 15% 10%, var(--glow), transparent 60%),
+    radial-gradient(500px circle at 85% 30%, var(--glow), transparent 55%);
+}
+
+::-webkit-scrollbar{ width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb{ background: var(--border); border-radius: 999px; }
+::-webkit-scrollbar-track{ background: transparent; }
