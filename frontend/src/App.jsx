@@ -1,8 +1,7 @@
-import { useState } from 'react'
-import './App.css'
-import ThemeToggle from './components/layout/ThemeToggle'
+import AppRouter from './router.jsx'
 
 function App() {
-  <ThemeToggle />
+  return <AppRouter />
 }
+
 export default App

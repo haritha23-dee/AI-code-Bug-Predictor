@@ -34,6 +34,16 @@ export function AuthProvider( {children} ){
             }
         };
 
+        const signup = async (email, password, full_name) => {
+            try {
+                await authApi.signup(email, password, full_name);
+                return await login(email, password);
+            }
+            catch (err){
+                throw new Error(err.response?.data?.detail || 'Signuo failed');
+            }
+        };
+
         const logout = () => {
             localStorage.removeItem('scrs_token');
             setUser(null);
@@ -47,7 +57,7 @@ export function AuthProvider( {children} ){
         // };
 
         const value = useMemo(
-            () => ({ user, setUser, loading, login, logout, updateProfile }),
+            () => ({ user, setUser, loading, login, logout, signup }),
             [user, loading]
         );
 

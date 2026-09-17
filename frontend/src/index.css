@@ -1,27 +1,31 @@
-@import "tailwindcss" ;
+@import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root{
-  --bg: #f3f4f6; 
+  --bg: #f5f6f8;
   --bg-soft: #ffffff;
-  --border: #e5e7eb;
-  --text: #111827;
-  --text-muted: #55606e;
+  --border: #e2e4e9;
+  --text: #0f1115;
+  --text-muted: #5b6472;
   --accent: #2563eb;
-  --accent-hover: #1d4ed8; /* needs to put slightly darker than accent */
-  --glow: rgba(37,99, 235, 0.4);   /*blue glow*/
+  --accent-hover: #1d4ed8;
+  --accent-2: #7c3aed;
+  --glow: rgba(37, 99, 235, 0.35);
+  --glow-2: rgba(124, 58, 237, 0.25);
 }
 
 .dark {
-  --bg: #0d1117;
-  --bg-soft: #161b22;
-  --border: #30363d;
-  --text: #e6edf3;
-  --text-muted: #8b949e;
-  --accent: #3b83f6;
-  --accent-hover: #60a5fa;
-  --glow: rgba(59, 130, 246, 0.4);
+  --bg: #08090c;
+  --bg-soft: #0f1115;
+  --border: #23262e;
+  --text: #f3f4f6;
+  --text-muted: #8b909c;
+  --accent: #6d5bff;
+  --accent-hover: #8577ff;
+  --accent-2: #a855f7;
+  --glow: rgba(109, 91, 255, 0.45);
+  --glow-2: rgba(168, 85, 247, 0.4);
 }
 
 @theme inline{
@@ -32,6 +36,7 @@
   --color-text-muted: var(--text-muted);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
+  --color-accent-2: var(--accent-2);
 }
 
 body {
@@ -42,19 +47,28 @@ body {
 }
 
 .glass-card{
-  background: color-mix(in srgb, var(--bg-soft) 70% transparent);
-  border: 1px solid var(--border);
-  backdrop-filter: blur(16px);
+  background: color-mix(in srgb, var(--bg-soft) 60% transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 80% transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .ambient-glow {
   position: fixed;
   inset: 0;
-  pointer-events: none;  /*cursor meant? */
+  pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(600px circle at 15% 10%, var(--glow), transparent 60%),
-    radial-gradient(500px circle at 85% 30%, var(--glow), transparent 55%);
+    radial-gradient(700px circle at 15% 10%, var(--glow), transparent 60%),
+    radial-gradient(600px circle at 85% 30%, var(--glow-2), transparent 55%),
+    radial-gradient(500px circle at 50% 90%, var(--glow), transparent 60%);
+}
+
+.text-gradient {
+  background: linear-gradient(120deg, var(--text) 30%, var(--accent) 70%, var(--accent-2) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 ::-webkit-scrollbar{ width: 8px; height: 8px; }

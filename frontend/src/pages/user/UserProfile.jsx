@@ -1,0 +1,114 @@
+import { useEffect, useState } from 'react';
+import { Mail, User as UserIcon, Shield, Calendar, BadgeCheck } from 'lucide-react';
+import { getMe } from '../../api/auth';
+import Spinner from '../../components/ui/Spinner';
+
+function getInitials(name, email) {
+    const source = name || email || '?';
+    return source
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map((s) => s[0])
+        .join('')
+        .toUpperCase();
+}
+
+export default function UserProfile() {
+    const [profile, setProfile] = useState(null);
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        getMe()
+            .then((res) => setProfile(res.data))
+            .catch((err) => setError(err.response?.data?.detail || 'Failed to load profile'))
+            .finally(() => setLoading(false));
+    }, []);
+
+    if (loading) return <Spinner full />;
+    if (error) {
+        return (
+            <div className="text-sm text-red-500 border border-red-500/30 bg-red-500/10 rounded-xl px-4 py-2">
+                {error}
+            </div>
+        );
+    }
+
+    const initials = getInitials(profile.full_name, profile.email);
+    const isAdmin = profile.role === 'admin';
+
+    return (
+        <div className="max-w-2xl">
+            <div className="relative h-36 rounded-2xl overflow-hidden bg-gradient-to-br from-accent/40 via-accent/15 to-transparent border border-border">
+                <div
+                    className="absolute inset-0 opacity-40"
+                    style={{
+                        background:
+                            'radial-gradient(400px circle at 20% 20%, var(--glow), transparent 60%), radial-gradient(300px circle at 80% 60%, var(--glow), transparent 55%)',
+                    }}
+                />
+            </div>
+
+            <div className="relative px-2 -mt-12 flex items-end gap-4">
+                <div className="h-24 w-24 rounded-2xl bg-bg-soft border-4 border-bg flex items-center justify-center shadow-lg shrink-0">
+                    <div className="h-full w-full rounded-xl bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center">
+                        <span className="text-2xl font-bold text-white tracking-wide">{initials}</span>
+                    </div>
+                </div>
+                <div className="pb-2 min-w-0">
+                    <h1 className="text-xl font-bold text-text truncate flex items-center gap-1.5">
+                        {profile.full_name || 'Unnamed User'}
+                        {isAdmin && <BadgeCheck size={17} className="text-accent shrink-0" />}
+                    </h1>
+                    <p className="text-sm text-text-muted truncate">{profile.email}</p>
+                </div>
+            </div>
+
+            <p className="mt-6 text-xs uppercase tracking-widest text-text-muted">
+                Account Details · Read-only
+            </p>
+
+            <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <DetailCard icon={UserIcon} label="Full Name" value={profile.full_name || '—'} />
+                <DetailCard icon={Mail} label="Email" value={profile.email || '—'} />
+                <DetailCard
+                    icon={Shield}
+                    label="Role"
+                    value={profile.role || 'user'}
+                    highlight={isAdmin}
+                />
+                {profile.created_at && (
+                    <DetailCard
+                        icon={Calendar}
+                        label="Joined"
+                        value={new Date(profile.created_at).toLocaleDateString()}
+                    />
+                )}
+            </div>
+        </div>
+    );
+}
+
+function DetailCard({ icon: Icon, label, value, highlight }) {
+    return (
+        <div className="group relative overflow-hidden rounded-2xl border border-border bg-bg-soft/70 backdrop-blur-md p-4 transition hover:border-accent/40 hover:-translate-y-0.5">
+            <div className="absolute inset-0 bg-gradient-to-br from-accent/0 to-accent/0 group-hover:from-accent/10 group-hover:to-transparent transition pointer-events-none" />
+            <div className="relative flex items-center gap-3">
+                <div
+                    className={`h-10 w-10 rounded-xl flex items-center justify-center border shrink-0 ${
+                        highlight
+                            ? 'bg-accent/15 border-accent/40 text-accent'
+                            : 'bg-border/20 border-border text-text-muted'
+                    }`}
+                >
+                    <Icon size={17} />
+                </div>
+                <div className="min-w-0">
+                    <p className="text-[11px] uppercase tracking-widest text-text-muted">{label}</p>
+                    <p className="text-sm font-medium text-text capitalize truncate">{value}</p>
+                </div>
+            </div>
+        </div>
+    );
+}
