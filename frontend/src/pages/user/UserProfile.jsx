@@ -143,7 +143,7 @@ export default function UserProfile() {
             <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <DetailCard icon={UserIcon} label="Full Name" value={profile.full_name || '—'} />
                 <DetailCard icon={Mail} label="Email" value={profile.email || '—'} />
-                <DetailCard icon={Shield} label="Role" value={profile.role || 'user'} highlight={isAdmin} />
+                <DetailCard icon={Shield} label="Role" value={profile.role || 'user'} highlight={isAdmin} capitalizeValue />
                 {profile.created_at && (
                     <DetailCard
                         icon={Calendar}
@@ -156,7 +156,7 @@ export default function UserProfile() {
     );
 }
 
-function DetailCard({ icon: Icon, label, value, highlight }) {
+function DetailCard({ icon: Icon, label, value, highlight, capitalizeValue }) {
     return (
         <div className="group relative overflow-hidden rounded-2xl border border-border bg-bg-soft/70 backdrop-blur-md p-4 transition hover:border-accent/40 hover:-translate-y-0.5">
             <div className="absolute inset-0 bg-gradient-to-br from-accent/0 to-accent/0 group-hover:from-accent/10 group-hover:to-transparent transition pointer-events-none" />
@@ -172,7 +172,9 @@ function DetailCard({ icon: Icon, label, value, highlight }) {
                 </div>
                 <div className="min-w-0">
                     <p className="text-[11px] uppercase tracking-widest text-text-muted">{label}</p>
-                    <p className="text-sm font-medium text-text capitalize truncate">{value}</p>
+                    <p className={`text-sm font-medium text-text capitalize truncate ${capitalizeValue ? 'capitalize' : ''}`}>
+                        {value}
+                    </p>
                 </div>
             </div>
         </div>

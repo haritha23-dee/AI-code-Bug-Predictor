@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FolderKanban, FileText, Plus } from 'lucide-react';
+import { FolderKanban, FileText, Plus, Sparkles } from 'lucide-react';
 import { listProjects, createProject, deleteProject } from '../../api/projects';
 import Spinner from '../../components/ui/Spinner';
 
@@ -58,14 +58,14 @@ export default function UserDashboard() {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-3">
                 <div>
-                    <h1 className="text-xl font-semibold text-text">Your Projects</h1>
-                    <p className="text-sm text-text-muted">{projects.length} total</p>
+                    <h1 className="text-2xl font-bold tracking-tight text-text">Your Projects</h1>
+                    <p className="text-sm text-text-muted mt-0.5">{projects.length} total</p>
                 </div>
                 <button
                     onClick={() => setCreating((c) => !c)}
-                    className="flex items-center gap-2 h-9 px-4 rounded-xl bg-accent hover:bg-accent-hover text-white text-sm transition"
+                    className="flex items-center gap-2 h-10 px-5 rounded-xl bg-accent hover:bg-accent-hover text-white text-sm font-medium transition shadow-[0_0_24px_-6px_var(--glow)]"
                 >
                     <Plus size={16} />
                     New Project
@@ -79,35 +79,32 @@ export default function UserDashboard() {
             )}
 
             {creating && (
-                <form
-                    onSubmit={handleCreate}
-                    className="glass-card rounded-xl p-4 space-y-3"
-                >
+                <form onSubmit={handleCreate} className="glass-card rounded-2xl p-5 space-y-3">
                     <input
                         value={newName}
                         onChange={(e) => setNewName(e.target.value)}
                         placeholder="Project name"
-                        className="w-full h-9 px-3 rounded-lg bg-bg border border-border text-sm text-text focus:outline-none focus:ring-2 focus:ring-accent"
+                        className="w-full h-10 px-3.5 rounded-lg bg-bg border border-border text-sm text-text focus:outline-none focus:ring-2 focus:ring-accent transition"
                         required
                     />
                     <textarea
                         value={newDesc}
                         onChange={(e) => setNewDesc(e.target.value)}
                         placeholder="Description (optional)"
-                        className="w-full px-3 py-2 rounded-lg bg-bg border border-border text-sm text-text focus:outline-none focus:ring-2 focus:ring-accent"
+                        className="w-full px-3.5 py-2.5 rounded-lg bg-bg border border-border text-sm text-text focus:outline-none focus:ring-2 focus:ring-accent transition"
                         rows={2}
                     />
                     <div className="flex gap-2">
                         <button
                             type="submit"
-                            className="h-9 px-4 rounded-xl bg-accent hover:bg-accent-hover text-white text-sm transition"
+                            className="h-10 px-5 rounded-xl bg-accent hover:bg-accent-hover text-white text-sm font-medium transition"
                         >
                             Create
                         </button>
                         <button
                             type="button"
                             onClick={() => setCreating(false)}
-                            className="h-9 px-4 rounded-xl border border-border text-sm text-text-muted hover:bg-border/30 transition"
+                            className="h-10 px-5 rounded-xl border border-border text-sm text-text-muted hover:bg-border/30 transition"
                         >
                             Cancel
                         </button>
@@ -116,8 +113,10 @@ export default function UserDashboard() {
             )}
 
             {projects.length === 0 ? (
-                <div className="glass-card rounded-xl p-10 text-center text-text-muted">
-                    <FolderKanban className="mx-auto mb-3" size={28} />
+                <div className="glass-card rounded-2xl p-14 text-center text-text-muted">
+                    <div className="h-12 w-12 rounded-2xl bg-accent/10 border border-accent/30 flex items-center justify-center mx-auto mb-4">
+                        <FolderKanban size={22} className="text-accent" />
+                    </div>
                     No projects yet. Create one to get started.
                 </div>
             ) : (
@@ -126,16 +125,19 @@ export default function UserDashboard() {
                         <div
                             key={project.id}
                             onClick={() => navigate(`/projects/${project.id}`)}
-                            className="glass-card rounded-xl p-4 cursor-pointer hover:border-accent/50 transition space-y-2"
+                            className="group relative overflow-hidden glass-card rounded-2xl p-5 cursor-pointer hover:border-accent/40 transition hover:-translate-y-1 space-y-2.5"
                         >
-                            <div className="flex items-center gap-2 text-text font-medium">
-                                <FileText size={16} className="text-accent" />
-                                {project.name}
+                            <div className="absolute inset-0 bg-gradient-to-br from-accent/0 to-accent-2/0 group-hover:from-accent/10 group-hover:to-accent-2/5 transition pointer-events-none" />
+                            <div className="relative flex items-center gap-2.5">
+                                <div className="h-9 w-9 rounded-lg bg-accent/10 border border-accent/30 flex items-center justify-center shrink-0">
+                                    <FileText size={16} className="text-accent" />
+                                </div>
+                                <span className="font-medium text-text truncate">{project.name}</span>
                             </div>
-                            <p className="text-sm text-text-muted line-clamp-2">
+                            <p className="relative text-sm text-text-muted line-clamp-2 min-h-[2.5em]">
                                 {project.description || 'No description'}
                             </p>
-                            <div className="flex items-center justify-between pt-1">
+                            <div className="relative flex items-center justify-between pt-1">
                                 <span className="text-xs text-text-muted">
                                     {new Date(project.created_at).toLocaleDateString()}
                                 </span>
