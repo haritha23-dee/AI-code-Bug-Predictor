@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Mail, User as UserIcon, Shield, Calendar, BadgeCheck } from 'lucide-react';
-import { getMe } from '../../api/auth';
+import { useEffect, useRef, useState } from 'react';
+import { Mail, User as UserIcon, Shield, Calendar, BadgeCheck, Camera, Loader2 } from 'lucide-react';
+import { getMe, uploadAvatar } from '../../api/auth';
 import Spinner from '../../components/ui/Spinner';
+
+const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
+const MAX_SIZE = 2 * 1024 * 1024; //2mb photo upload limit
 
 function getInitials(name, email) {
     const source = name || email || '?';
@@ -17,7 +20,10 @@ function getInitials(name, email) {
 export default function UserProfile() {
     const [profile, setProfile] = useState(null);
     const [error, setError] = useState('');
+    const [avatarError, setAvatarError] = useState('');
     const [loading, setLoading] = useState(true);
+    const [uploading, setUploading] = useState(false);
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         getMe()
@@ -25,6 +31,38 @@ export default function UserProfile() {
             .catch((err) => setError(err.response?.data?.detail || 'Failed to load profile'))
             .finally(() => setLoading(false));
     }, []);
+
+    const handleAvatarClick = () => {
+        if (!uploading) fileInputRef.current?.click();
+    };
+
+    const handleAvatarChange = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setAvatarError('');
+
+        if (!ALLOWED_TYPES.includes(file.type)) {
+            setAvatarError('Only PNG, JPEG, or WEBP images are allowed');
+            e.target.value = '';
+            return;
+        }
+        if (file.size > MAX_SIZE) {
+            setAvatarError('Image too large (max 2MB)');
+            e.target.value = '';
+            return;
+        }
+
+        setUploading(true);
+        try {
+            const res = await uploadAvatar(file);
+            setProfile(res.data);
+        } catch (err) {
+            setAvatarError(err.response?.data?.detail || 'Avatar upload failed');
+        } finally {
+            setUploading(false);
+            e.target.value = '';
+        }
+    };
 
     if (loading) return <Spinner full />;
     if (error) {
@@ -51,11 +89,38 @@ export default function UserProfile() {
             </div>
 
             <div className="relative px-2 -mt-12 flex items-end gap-4">
-                <div className="h-24 w-24 rounded-2xl bg-bg-soft border-4 border-bg flex items-center justify-center shadow-lg shrink-0">
-                    <div className="h-full w-full rounded-xl bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center">
-                        <span className="text-2xl font-bold text-white tracking-wide">{initials}</span>
+                <div className="relative h-24 w-24 shrink-0">
+                    <div className="h-full w-full rounded-2xl bg-bg-soft border-4 border-bg flex items-center justify-center shadow-lg overflow-hidden">
+                        {profile.avatar_url ? (
+                            <img
+                                src={profile.avatar_url}
+                                alt="Profile"
+                                className="h-full w-full object-cover"
+                            />
+                        ) : (
+                            <div className="h-full w-full rounded-xl bg-gradient-to-br from-accent to-accent-hover flex items-center justify-center">
+                                <span className="text-2xl font-bold text-white tracking-wide">{initials}</span>
+                            </div>
+                        )}
                     </div>
+
+                    <button
+                        onClick={handleAvatarClick}
+                        disabled={uploading}
+                        className="absolute -bottom-1 -right-1 h-8 w-8 rounded-full bg-accent hover:bg-accent-hover text-white flex items-center justify-center shadow-lg border-2 border-bg transition disabled:opacity-70"
+                        title="Change profile photo"
+                    >
+                        {uploading ? <Loader2 size={14} className="animate-spin" /> : <Camera size={14} />}
+                    </button>
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp"
+                        onChange={handleAvatarChange}
+                        className="hidden"
+                    />
                 </div>
+
                 <div className="pb-2 min-w-0">
                     <h1 className="text-xl font-bold text-text truncate flex items-center gap-1.5">
                         {profile.full_name || 'Unnamed User'}
@@ -65,6 +130,12 @@ export default function UserProfile() {
                 </div>
             </div>
 
+            {avatarError && (
+                <p className="mt-3 text-sm text-red-500 border border-red-500/30 bg-red-500/10 rounded-xl px-4 py-2">
+                    {avatarError}
+                </p>
+            )}
+
             <p className="mt-6 text-xs uppercase tracking-widest text-text-muted">
                 Account Details · Read-only
             </p>
@@ -72,12 +143,7 @@ export default function UserProfile() {
             <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <DetailCard icon={UserIcon} label="Full Name" value={profile.full_name || '—'} />
                 <DetailCard icon={Mail} label="Email" value={profile.email || '—'} />
-                <DetailCard
-                    icon={Shield}
-                    label="Role"
-                    value={profile.role || 'user'}
-                    highlight={isAdmin}
-                />
+                <DetailCard icon={Shield} label="Role" value={profile.role || 'user'} highlight={isAdmin} />
                 {profile.created_at && (
                     <DetailCard
                         icon={Calendar}

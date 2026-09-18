@@ -51,7 +51,7 @@ export default function SignUpPage() {
 
                     <button
                         type="button"
-                        onClick={() => alert('Google sign-up coming soon')}
+                        onClick={() => alert('Google sign-up not yet')}
                         className="w-full h-11 flex items-center justify-center gap-2 rounded-xl border border-border bg-bg-soft hover:bg-border/30 text-sm font-medium text-text transition mb-5"
                     >
                         <svg width="16" height="16" viewBox="0 0 24 24">
