@@ -54,8 +54,11 @@ export default function SignInPage() {
                             <input
                                 type="email"
                                 required
+                                autoCapitalize="none"
+                                autoCorrect="off"
+                                spellCheck="false"
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={(e) => setEmail(e.target.value.toLowerCase())}
                                 placeholder="Email address"
                                 className="w-full h-11 pl-10 pr-4 rounded-xl bg-bg border border-border text-sm text-text focus:outline-none focus:ring-2 focus:ring-accent transition"
                             />

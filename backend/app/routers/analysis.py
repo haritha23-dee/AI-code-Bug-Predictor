@@ -28,14 +28,15 @@ def trigger_analysis(file_id: UUID, user=Depends(require_user), db=Depends(get_u
         "file_id": str(file_id),
         "project_id": file_data["project_id"],
         "user_id": user["id"],
-        "bug_severity": result_json.get("bug_severity"),
+        "bug_severity": result_json.get("bug_severity") if result_json.get("bug_severity") in ["low", "medium", "high", "critical"] else None,
+        #bug fix for ENUM in bug_severity, default to None(NULL)
         "bug_type": result_json.get("bug_type"),
         "bug_score": result_json.get("bug_score"),
         "complexity_score": result_json.get("complexity_score"),
         "quality_score": result_json.get("quality_score"),
         "flagged_lines": result_json.get("flagged_lines"),
         "suggested_fix_text": result_json.get("suggested_fix_text"),
-        "suggested_code_text": result_json.get("suggested_code"),
+        "suggested_code_text": result_json.get("suggested_code") or result_json.get("suggested_code"),
     }
 
     insert = db.table("analysis_results").insert(insert_payload).execute()

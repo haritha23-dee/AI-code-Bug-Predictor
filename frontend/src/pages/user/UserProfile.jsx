@@ -122,7 +122,8 @@ export default function UserProfile() {
                 </div>
 
                 <div className="pb-2 min-w-0">
-                    <h1 className="text-xl font-bold text-text truncate flex items-center gap-1.5">
+                    <h1 className="text-xl font-bold text-text truncate flex items-center gap-1.5 capitalize"> 
+                        {/* profile capitalize updation */}
                         {profile.full_name || 'Unnamed User'}
                         {isAdmin && <BadgeCheck size={17} className="text-accent shrink-0" />}
                     </h1>
@@ -141,7 +142,8 @@ export default function UserProfile() {
             </p>
 
             <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <DetailCard icon={UserIcon} label="Full Name" value={profile.full_name || '—'} />
+                <DetailCard icon={UserIcon} label="Full Name" value={profile.full_name || '—'} capitalizeValue />  
+                {/* profile detail name capitalize in above */}
                 <DetailCard icon={Mail} label="Email" value={profile.email || '—'} />
                 <DetailCard icon={Shield} label="Role" value={profile.role || 'user'} highlight={isAdmin} capitalizeValue />
                 {profile.created_at && (
@@ -172,7 +174,7 @@ function DetailCard({ icon: Icon, label, value, highlight, capitalizeValue }) {
                 </div>
                 <div className="min-w-0">
                     <p className="text-[11px] uppercase tracking-widest text-text-muted">{label}</p>
-                    <p className={`text-sm font-medium text-text capitalize truncate ${capitalizeValue ? 'capitalize' : ''}`}>
+                    <p className={`text-sm font-medium text-text truncate ${capitalizeValue ? 'capitalize' : ''}`}>
                         {value}
                     </p>
                 </div>
