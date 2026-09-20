@@ -16,6 +16,7 @@ const SignInPage = lazy(() => import('./pages/auth/SignInPage'));
 const SignUpPage = lazy(() => import('./pages/auth/SignUpPage'));
 const AdminLoginPage = lazy(() => import('./pages/auth/AdminLoginPage'));
 const AuthCallback = lazy(() => import('./pages/auth/AuthCallback'));
+const ForgotPassword = lazy(() => import('./pages/auth/ForgotPassword'));
 
 const UserDashboard = lazy(() => import('./pages/user/UserDashboard'));
 const ProjectDetail = lazy(() => import('./pages/user/ProjectDetail'));
@@ -44,6 +45,8 @@ export default function AppRouter() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/login" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
+        {/* forgot password */}
+        <Route path="/forgot-password" element={<ForgotPassword/>} />
         <Route path="/tools" element={<Tools />} />
         <Route path="/privacy" element={<Privacy />} />
         {/* auth callback route */}
