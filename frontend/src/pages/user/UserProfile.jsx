@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Mail, User as UserIcon, Shield, Calendar, BadgeCheck, Camera, Loader2 } from 'lucide-react';
 import { getMe, uploadAvatar } from '../../api/auth';
+import { useAuth } from '../../context/AuthContext';
 import Spinner from '../../components/ui/Spinner';
 
 const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/webp'];
@@ -56,6 +57,8 @@ export default function UserProfile() {
         try {
             const res = await uploadAvatar(file);
             setProfile(res.data);
+            //refresh user profile
+            await refreshUser().catch(()=> {});    
         } catch (err) {
             setAvatarError(err.response?.data?.detail || 'Avatar upload failed');
         } finally {

@@ -62,6 +62,11 @@ export function AuthProvider( {children} ){
             setUser(null);
         };
 
+        const refreshUser = async () => {
+            const me = await authApi.getMe();
+            setUser(me.data);
+            return me.data;
+        };
 
         // const updateProfile = async(data) => {
         //     const res = await authApi.updateProfile(data);
@@ -70,7 +75,7 @@ export function AuthProvider( {children} ){
         // };
 
         const value = useMemo(
-            () => ({ user, setUser, loading, login, logout, signup, loginWithGoogle }),
+            () => ({ user, setUser, loading, login, logout, signup, loginWithGoogle, refreshUser }),
             [user, loading]
         );
 
