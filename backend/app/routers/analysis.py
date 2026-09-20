@@ -66,3 +66,25 @@ def get_analysis_history(file_id: UUID, user=Depends(require_user), db=Depends(g
         .order("created_at", desc=True)
         .execute()
     )
+
+#full analysis history
+@router.get("/all/history")
+def get_all_user_history(user=Depends(require_user), db=Depends(get_user_supabase)):
+    result = (
+        db.table("analysis_results")
+        .select("*, project_files(file_name), projects(name)")
+        .eq("user_id", user["id"])
+        .order("created_at", desc=True)
+        .execute()
+    )
+    
+    formatted_data = []
+    for row in result.data:
+        file_name = row.get("project_files", {}).get("file_name", "Unknown File") if row.get("project_files") else "Unknown File"
+        project_name = row.get("projects", {}).get("name", "Unknown Project") if row.get("projects") else "Unknown Project"
+        
+        row["file_name"] = file_name
+        row["project_name"] = project_name
+        formatted_data.append(row)
+        
+    return formatted_data
