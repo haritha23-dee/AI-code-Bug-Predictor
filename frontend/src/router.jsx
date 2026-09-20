@@ -15,6 +15,7 @@ const Privacy = lazy(() => import('./pages/Privacy'));
 const SignInPage = lazy(() => import('./pages/auth/SignInPage'));
 const SignUpPage = lazy(() => import('./pages/auth/SignUpPage'));
 const AdminLoginPage = lazy(() => import('./pages/auth/AdminLoginPage'));
+const AuthCallback = lazy(() => import('./pages/auth/AuthCallback'));
 
 const UserDashboard = lazy(() => import('./pages/user/UserDashboard'));
 const ProjectDetail = lazy(() => import('./pages/user/ProjectDetail'));
@@ -45,6 +46,8 @@ export default function AppRouter() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/tools" element={<Tools />} />
         <Route path="/privacy" element={<Privacy />} />
+        {/* auth callback route */}
+        <Route path="/auth/callback" element={<AuthCallback />} />     
         <Route path="/admin-login" element={<AdminLoginPage />} />
 
         <Route element={<ProtectedRoute />}>

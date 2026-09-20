@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, ShieldCheck, Zap, Code2 } from 'lucide-react';
-import { FaGithub } from 'react-icons/fa6';
+import { ArrowRight, Sparkles, ShieldCheck, Zap, Code2, Github } from 'lucide-react';
 import ThemeToggle from '../components/layout/ThemeToggle';
 
 const features = [
@@ -139,7 +138,7 @@ export default function Landing() {
                             rel="noopener noreferrer"
                             aria-label="Github Repository"
                         >
-                            <FaGithub size = {18} className="hover:text-text transition cursor-pointer" />
+                            <Github size = {18} className="hover:text-text transition cursor-pointer" />
                         </a>
                     </div>
                 </div>

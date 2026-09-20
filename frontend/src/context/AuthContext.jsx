@@ -1,5 +1,7 @@
 import { createContext, useState, useEffect, useContext, useMemo } from "react";
 import * as authApi from '../api/auth';
+//supabase client
+import { supabase } from '../services/supabase';
 
 const AuthContext = createContext(null);
 
@@ -34,6 +36,17 @@ export function AuthProvider( {children} ){
             }
         };
 
+        //google auth provider by supabase
+        const loginWithGoogle = async() => {
+            const {error} = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: `${window.location.origin}/auth/callback`,
+                },
+            });
+            if (error) throw new Error(error.message);
+        };
+
         const signup = async (email, password, full_name) => {
             try {
                 await authApi.signup(email, password, full_name);
@@ -57,7 +70,7 @@ export function AuthProvider( {children} ){
         // };
 
         const value = useMemo(
-            () => ({ user, setUser, loading, login, logout, signup }),
+            () => ({ user, setUser, loading, login, logout, signup, loginWithGoogle }),
             [user, loading]
         );
 

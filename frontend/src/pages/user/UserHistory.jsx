@@ -21,7 +21,16 @@ export default function UserHistory() {
 
     useEffect(() => {
         getAggregatedUserHistory()
-            .then(setHistory)
+            .then((data) => {
+                if (Array.isArray(data)) {
+                    setHistory(data);
+                } else if (data && Array.isArray(data.data)) {
+                    setHistory(data.data);
+                } else {
+                    console.error("Backend sent garbage instead of an array:", data);
+                    setHistory([]); 
+                }
+            })
             .catch((err) => setError(err.response?.data?.detail || 'Failed to load history'))
             .finally(() => setLoading(false));
     }, []);
