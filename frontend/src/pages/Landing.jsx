@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, ShieldCheck, Zap, Code2, Github, Upload, Wand2, Download } from 'lucide-react';
+import { ArrowRight, Sparkles, ShieldCheck, Zap, Code2, Upload, Wand2, Download } from 'lucide-react';
 import ThemeToggle from '../components/layout/ThemeToggle';
 
 const features = [
@@ -161,7 +161,9 @@ export default function Landing() {
             </section>
 
             {/* Features */}
-            <section id="features" className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-5 px-6 md:px-12 pb-24 max-w-6xl mx-auto scroll-mt-24">
+            <section id="features" className="relative z-10 px-6 md:px-12 pb-24 max-w-6xl mx-auto scroll-mt-24">
+                <h2 className="font-display text-2xl md:text-3xl font-bold text-center mb-12">Features</h2> 
+                <div className="gird grid-cols-1 md:grid-cols-3 gap-5"/>
                 {features.map(({ icon: Icon, title, desc }) => (
                     <div key={title} className="glass-card rounded-2xl p-6 hover:border-accent/40 transition hover:-translate-y-1">
                         <div className="h-11 w-11 rounded-xl bg-accent/10 border border-accent/30 flex items-center justify-center mb-4">
