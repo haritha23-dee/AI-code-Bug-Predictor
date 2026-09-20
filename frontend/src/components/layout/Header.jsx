@@ -39,7 +39,7 @@ export default function Header() {
                 <div className="relative" ref={menuRef}>
                     <button
                         onClick={() => setOpen((o) => !o)}
-                        className="flex items-center gap-2.5 h-10 pl-1.5 pr-3 rounded-xl border border-border hover:border-accent/40 hover: bg-border/20 transition"
+                        className="flex items-center gap-2.5 h-10 pl-1.5 pr-3 rounded-xl border border-border hover:border-accent/40 hover:bg-border/20 transition"
                     >
                         {user?.avatar_url ? (
                             <img src={user.avatar_url} alt="" className="h-7 w-7 rounded-lg object-cover" />
@@ -53,20 +53,20 @@ export default function Header() {
                     </button>
 
                     {open && (
-                        <div className="absolute right-0 mt-2 w-48 glass-card rounded-xl shadow-2xl py-1.5 text-sm overflow-hidden">
+                        <div className="absolute right-0 top-full mt-2 w-48 z-50 rounded-2xl border border-border bg-bg-soft backdrop-blur-xl shadow-2xl p-1.5">
                             <button
                                 onClick={() => {
                                     setOpen(false);
-                                    navigate('/profile');
+                                    navigate(user?.role === 'admin' ? '/admin/profile' : '/profile');
                                 }}
-                                className="w-full text-left px-3.5 py-2.5 flex items-center gap-2.5 text-text hover:bg-accent/10 hover:text-accent transition"
+                                className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm flex items-center gap-2.5 text-text hover:bg-accent/10 hover:text-accent transition"
                             >
                                 <User size={15} />
                                 Profile
                             </button>
                             <button
                                 onClick={handleLogout}
-                                className="w-full text-left px-3.5 py-2.5 flex items-center gap-2.5 text-red-500 hover:bg-red-500/10 transition"
+                                className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm flex items-center gap-2.5 text-red-500 hover:bg-red-500/10 transition"
                             >
                                 <LogOut size={15} />
                                 Logout
