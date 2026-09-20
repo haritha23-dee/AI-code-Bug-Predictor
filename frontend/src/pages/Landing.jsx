@@ -52,8 +52,8 @@ export default function Landing() {
                     Powered by Groq — enterprise-grade inference
                 </div>
 
-                <h1 className="text-4xl md:text-6xl font-bold tracking-tight max-w-3xl leading-[1.1]">
-                    Your AI Assistant,
+                {/* font changes */}
+                <h1 className="font-display text-4xl md:text-6xl font-bold tracking-tight max-w-3xl leading-[1.1]">    Your AI Assistant,
                     <br />
                     <span className="text-gradient">Built to Work Smarter</span>
                 </h1>
