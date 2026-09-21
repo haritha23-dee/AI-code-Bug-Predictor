@@ -15,7 +15,8 @@ export default function ProtectedRoute( {roles} ){
     if (!user) return <Navigate to="/login" replace />;
 
     if (roles && !roles.includes(user.role)){
-        return <Navigate to="unauthorized" replace />;
+        // regular user dashboard if access the admin dashboard then redirects to the user's dashboard
+        return <Navigate to="/dashboard" state={{ unauthorized: true }} replace />;
     }
 
     return <Outlet />;

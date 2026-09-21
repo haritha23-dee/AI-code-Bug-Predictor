@@ -1,13 +1,30 @@
 import { createContext, useState, useEffect, useContext, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import * as authApi from '../api/auth';
 //supabase client
 import { supabase } from '../services/supabase';
+import { registerUnauthorizedHandler } from "../services/api";
 
 const AuthContext = createContext(null);
 
 export function AuthProvider( {children} ){
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
+    const clearSession = () => {
+        localStorage.removeItem('scrs_token');
+        setUser(null);
+    };
+
+    //global handler(expired and invalid token land here & forces clean logout + redirect
+
+    useEffect (() => {
+        registerUnauthorizedHandler(() => {
+            clearSession();
+            navigate('/login', { replace: true });
+        })
+    })
 
     useEffect(() =>{
         const token = localStorage.getItem('scrs_token');

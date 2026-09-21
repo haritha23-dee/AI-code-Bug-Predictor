@@ -11,4 +11,25 @@ api.interceptors.request.use((config) => {
 }, (error) => Promise.reject(error)
 );
 
+//clean logout + redirect when any authenticated request comes back
+let unauthorizedHandler = null;
+export const registerUnauthorizedHandler = (fn) => {
+    unauthorizedHandler = fn;
+}
+
+const AUTH_ENDPOINTS = ['/auth/login', '/auth/signup', '/auth/admin-login'];
+
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        const url = error.config?.url || '';
+        const isAuthEndpoint = AUTH_ENDPOINTS.some((path) => url.includes(path));
+
+        if (error.response?.status === 401 && !isAuthEndpoint && unauthorizedHandler){
+            unauthorizedHandler();
+        }
+        return Promise.reject(error);
+    }
+)
+
 export default api;
