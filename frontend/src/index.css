@@ -51,9 +51,9 @@ body {
   font-family: var(--font-sans);
 }
 
-.glass-card{
-  background: color-mix(in srgb, var(--bg-soft) 60% transparent);
-  border: 1px solid color-mix(in srgb, var(--border) 80% transparent);
+.glass-card {
+  background: color-mix(in srgb, var(--bg-soft) 60%, transparent);
+  border: 1px solid color-mix(in srgb, var(--border) 80%, transparent);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
 }

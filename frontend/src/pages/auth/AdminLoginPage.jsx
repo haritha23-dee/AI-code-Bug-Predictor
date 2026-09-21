@@ -4,9 +4,10 @@ import { ShieldAlert, Lock, Mail, ArrowRight } from 'lucide-react';
 import { adminLogin } from '../../api/admin';
 import { useAuth } from '../../context/AuthContext';
 import * as authApi from '../../api/auth';
+import BackToHome from '../../components/auth/BackToHome';
 
 export default function AdminLoginPage() {
-    const { setUser } = useAuth();
+    const { setUser, scheduleExpiryWarning } = useAuth();
     const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
@@ -21,7 +22,6 @@ export default function AdminLoginPage() {
         try {
             const res = await adminLogin(email, password);
             //refresh token
-            const { scheduleExpiryWarning } = useAuth(); a
             localStorage.setItem('scrs_token', res.data.access_token);
             localStorage.setItem('scrs_refresh_token', res.data.refresh_token);
             scheduleExpiryWarning(res.data.access_token);
@@ -40,7 +40,7 @@ export default function AdminLoginPage() {
     return (
         <div className="relative min-h-screen flex items-center justify-center bg-bg text-text px-6">
             <div className="ambient-glow" />
-
+            <BackToHome />
             <div className="relative z-10 w-full max-w-md">
                 <div className="glass-card rounded-3xl p-8 md:p-10 shadow-2xl">
                     <div className="flex flex-col items-center text-center mb-8">

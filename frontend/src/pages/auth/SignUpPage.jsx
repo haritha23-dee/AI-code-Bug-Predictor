@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import BackToHome from '../../components/auth/BackToHome';
 
 export default function SignUpPage() {
     const { signup, loginWithGoogle } = useAuth();
@@ -30,7 +31,7 @@ export default function SignUpPage() {
     return (
         <div className="relative min-h-screen flex items-center justify-center bg-bg text-text px-6">
             <div className="ambient-glow" />
-
+            <BackToHome />   a
             <div className="relative z-10 w-full max-w-md">
                 <Link to="/" className="block text-center text-lg font-semibold mb-8 tracking-tight">
                     Brainy

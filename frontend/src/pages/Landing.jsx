@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, ShieldCheck, Zap, Code2, AlertTriangle, Gauge } from 'lucide-react';
+import { ArrowRight, Sparkles, ShieldCheck, Zap, Code2, AlertTriangle, Gauge, Mail } from 'lucide-react';
 import ThemeToggle from '../components/layout/ThemeToggle';
 
 const GithubIcon = (props) => (
@@ -8,9 +8,26 @@ const GithubIcon = (props) => (
     </svg>
 );
 
+const LinkedinIcon = (props) => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" {...props}>
+        <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.11 20.45H3.56V9h3.55v11.45Z" />
+    </svg>
+);
+
+const DiscordIcon = (props) => (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" {...props}>
+        <path d="M20.32 4.37a19.8 19.8 0 0 0-4.89-1.52.07.07 0 0 0-.08.04c-.21.38-.45.87-.61 1.26a18.3 18.3 0 0 0-5.48 0 12.6 12.6 0 0 0-.62-1.26.08.08 0 0 0-.08-.04c-1.7.29-3.34.8-4.89 1.52a.07.07 0 0 0-.03.03C1.08 8.68.37 12.86.7 16.98a.08.08 0 0 0 .03.06 19.9 19.9 0 0 0 5.99 3.03.08.08 0 0 0 .08-.03c.46-.63.87-1.3 1.23-2a.08.08 0 0 0-.04-.11 13.1 13.1 0 0 1-1.87-.89.08.08 0 0 1 0-.13c.13-.09.25-.19.37-.28a.07.07 0 0 1 .08 0c3.93 1.79 8.18 1.79 12.06 0a.07.07 0 0 1 .08 0c.12.1.24.19.37.28a.08.08 0 0 1 0 .13c-.6.35-1.22.65-1.87.89a.08.08 0 0 0-.04.11c.36.7.78 1.37 1.23 2a.08.08 0 0 0 .08.03 19.8 19.8 0 0 0 6-3.03.08.08 0 0 0 .03-.06c.4-4.76-.67-8.9-2.83-12.58a.06.06 0 0 0-.03-.03ZM8.68 14.6c-1.18 0-2.15-1.08-2.15-2.42 0-1.33.95-2.42 2.15-2.42 1.21 0 2.17 1.1 2.15 2.42 0 1.34-.95 2.42-2.15 2.42Zm6.65 0c-1.18 0-2.15-1.08-2.15-2.42 0-1.33.95-2.42 2.15-2.42 1.21 0 2.17 1.1 2.15 2.42 0 1.34-.94 2.42-2.15 2.42Z" />
+    </svg>
+);
+
 function scrollToSection(id) {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
+const LINKEDIN_URL = 'https://linkedin.com/in/haritha-sampath';
+const DISCORD_URL = 'https://discord.gg/H9tzPNmQf';
+const GITHUB_URL = 'https://github.com/haritha23-dee/AI-code-Bug-Predictor/';
+const CONTACT_EMAIL = 'octoberfairyy@gmail.com';
 
 export default function Landing() {
     return (
@@ -42,7 +59,7 @@ export default function Landing() {
                 </div>
             </nav>
 
-            <section className="relative z-10 px-6 md:px-12 pt-10 pb-24 max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+            <section className="relative z-10 px-6 md:px-12 pt-14 pb-20 max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
                 <div>
                     <div className="glass-card inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs text-text-muted mb-8">
                         <Sparkles size={13} className="text-accent" />
@@ -58,7 +75,7 @@ export default function Landing() {
                         <span className="text-gradient">Code Analysis</span>
                     </h1>
 
-                    <p className="mt-6 max-w-lg text-text-muted text-base md:text-lg">
+                    <p className="mt-6 max-w-lg text-text-muted text-base md:text-lg leading-relaxed">
                         A dashboard for in-depth analysis and quality control of every file you ship.
                     </p>
 
@@ -76,17 +93,6 @@ export default function Landing() {
                         >
                             How it works
                         </button>
-                    </div>
-
-                    <div className="mt-16 pt-8 border-t border-border">
-                        <p className="text-text-muted text-sm mb-6">
-                            Where messy code is scanned, scored, and rewritten.
-                        </p>
-                        <div className="grid grid-cols-3 gap-4">
-                            <StatBlock icon={Zap} label="Groq Inference" value="Sub-second" />
-                            <StatBlock icon={Code2} label="Languages" value="9 Supported" />
-                            <StatBlock icon={ShieldCheck} label="Severity Levels" value="4 Tiers" />
-                        </div>
                     </div>
                 </div>
 
@@ -129,8 +135,19 @@ export default function Landing() {
                 </div>
             </section>
 
-            <section id="features" className="relative z-10 px-6 md:px-12 pb-24 max-w-6xl mx-auto scroll-mt-24">
-                <h2 className="font-display text-2xl md:text-3xl font-bold text-center mb-12">Everything you need to ship clean code</h2>
+            <section className="relative z-10 px-6 md:px-12 pb-8 max-w-6xl mx-auto">
+                <div className="glass-card rounded-2xl px-6 py-6 grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border">
+                    <StatBlock icon={Zap} label="Groq Inference" value="Sub-second" />
+                    <StatBlock icon={Code2} label="Languages Supported" value="9" />
+                    <StatBlock icon={ShieldCheck} label="Severity Tiers" value="4" />
+                </div>
+            </section>
+
+            <section id="features" className="relative z-10 px-6 md:px-12 pt-16 pb-24 max-w-6xl mx-auto scroll-mt-24">
+                <div className="text-center mb-14">
+                    <p className="text-xs uppercase tracking-widest text-accent font-medium mb-3">Why Brainy</p>
+                    <h2 className="font-display text-2xl md:text-3xl font-bold">Everything you need to ship clean code</h2>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <FeatureCard icon={Zap} title="Groq-Powered Analysis" desc="Near-instant inference to scan your codebase for bugs, complexity, and quality risk." />
                     <FeatureCard icon={ShieldCheck} title="Severity-Ranked Findings" desc="Every issue flagged by line, message, and severity — critical to low, nothing buried." />
@@ -138,15 +155,18 @@ export default function Landing() {
                 </div>
             </section>
 
-            <section id="how-it-works" className="relative z-10 px-6 md:px-12 pb-24 max-w-4xl mx-auto scroll-mt-24">
-                <h2 className="font-display text-2xl md:text-3xl font-bold text-center mb-12">How it works</h2>
+            <section id="how-it-works" className="relative z-10 px-6 md:px-12 pb-28 max-w-4xl mx-auto scroll-mt-24">
+                <div className="text-center mb-14">
+                    <p className="text-xs uppercase tracking-widest text-accent font-medium mb-3">The Process</p>
+                    <h2 className="font-display text-2xl md:text-3xl font-bold">How it works</h2>
+                </div>
                 <div className="space-y-4">
                     {[
                         { title: 'Upload or paste your code', desc: 'Create a project, then upload a file or paste code directly — pick your language.' },
                         { title: 'Groq analyzes it', desc: 'Bug severity, complexity, and quality scored in seconds, line by line.' },
                         { title: 'Ship the fix', desc: 'Compare original vs. suggested code side-by-side and download the rewrite.' },
                     ].map((s, i) => (
-                        <div key={s.title} className="glass-card rounded-2xl p-6 flex items-start gap-4">
+                        <div key={s.title} className="glass-card rounded-2xl p-6 flex items-start gap-4 hover:border-accent/30 transition">
                             <div className="h-9 w-9 rounded-full bg-accent/10 border border-accent/30 flex items-center justify-center shrink-0 text-accent text-sm font-bold">
                                 {i + 1}
                             </div>
@@ -159,39 +179,93 @@ export default function Landing() {
                 </div>
             </section>
 
+            <section className="relative z-10 px-6 md:px-12 pb-24 max-w-4xl mx-auto text-center">
+                <div className="glass-card rounded-3xl p-10 md:p-14">
+                    <h2 className="font-display text-2xl md:text-3xl font-bold mb-3">Ready to ship cleaner code?</h2>
+                    <p className="text-text-muted mb-8 max-w-md mx-auto">Create your first project and get a Groq-powered analysis in seconds.</p>
+                    <Link
+                        to="/signup"
+                        className="inline-flex items-center gap-2 bg-accent hover:bg-accent-hover text-white px-7 py-3.5 rounded-xl text-sm font-medium transition shadow-[0_0_32px_-6px_var(--glow)]"
+                    >
+                        Get Started Free
+                        <ArrowRight size={16} />
+                    </Link>
+                </div>
+            </section>
+
             <footer className="relative z-10 border-t border-border">
-                <div className="max-w-6xl mx-auto px-6 md:px-12 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div className="flex items-center gap-2">
-                        <span className="font-display font-semibold text-text">Brainy</span>
-                        <span className="text-xs text-text-muted">© {new Date().getFullYear()}</span>
+                <div className="max-w-6xl mx-auto px-6 md:px-12 py-14 grid grid-cols-2 md:grid-cols-4 gap-10">
+                    <div className="col-span-2 md:col-span-1">
+                        <div className="flex items-center gap-2 mb-3">
+                            <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-accent to-accent-2 flex items-center justify-center">
+                                <Sparkles size={13} className="text-white" />
+                            </div>
+                            <span className="font-display font-semibold text-text">Brainy</span>
+                        </div>
+                        <p className="text-sm text-text-muted leading-relaxed max-w-xs">
+                            Groq-powered code analysis, bug scoring, and AI rewrites in one workspace.
+                        </p>
                     </div>
-                    <div className="flex items-center gap-6 text-sm text-text-muted">
-                        <Link to="/tools" className="hover:text-text transition">Tools</Link>
-                        <Link to="/terms" className="hover:text-text transition">Terms</Link>
-                        <Link to="/privacy" className="hover:text-text transition">Privacy</Link>
-                        <a 
-                                                
-                            href="https://github.com/haritha23-dee/AI-code-Bug-Predictor/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            aria-label="GitHub Repository"
-                            className="text-text-muted hover:text-text transition"
-                        >
-                            <GithubIcon />
-                        </a>
+
+                    <div>
+                        <p className="text-xs uppercase tracking-widest text-text-muted mb-4">Platform</p>
+                        <ul className="space-y-2.5 text-sm">
+                            <li><button onClick={() => scrollToSection('features')} className="text-text-muted hover:text-text transition">Features</button></li>
+                            <li><button onClick={() => scrollToSection('how-it-works')} className="text-text-muted hover:text-text transition">How it works</button></li>
+                            <li><Link to="/tools" className="text-text-muted hover:text-text transition">Tools Integration</Link></li>
+                        </ul>
                     </div>
+
+                    <div>
+                        <p className="text-xs uppercase tracking-widest text-text-muted mb-4">Legal</p>
+                        <ul className="space-y-2.5 text-sm">
+                            <li><Link to="/terms" className="text-text-muted hover:text-text transition">Terms & Conditions</Link></li>
+                            <li><Link to="/privacy" className="text-text-muted hover:text-text transition">Privacy Policy</Link></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <p className="text-xs uppercase tracking-widest text-text-muted mb-4">Community</p>
+                        <div className="flex items-center gap-3">
+                            <SocialIcon href={GITHUB_URL} label="GitHub" icon={GithubIcon} />
+                            <SocialIcon href={LINKEDIN_URL} label="LinkedIn" icon={LinkedinIcon} />
+                            <SocialIcon href={`https://mail.google.com/mail/?view=cm&fs=1&to=${CONTACT_EMAIL}`} label="Email" icon={Mail} external={true} />
+                            <SocialIcon href={DISCORD_URL} label="Discord" icon={DiscordIcon} />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="border-t border-border py-6 px-6 md:px-12">
+                    <p className="text-xs text-text-muted text-center">© {new Date().getFullYear()} Brainy. All rights reserved.</p>
                 </div>
             </footer>
         </div>
     );
 }
 
+function SocialIcon({ href, label, icon: Icon, external = true }) {
+    return (
+        <a
+            href={href}
+            {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+            aria-label={label}
+            className="h-9 w-9 rounded-lg border border-border flex items-center justify-center text-text-muted hover:text-accent hover:border-accent/40 transition shadow-[0_0_0_0_var(--glow)] hover:shadow-[0_0_16px_-4px_var(--glow)]"
+        >
+            <Icon size={16} />
+        </a>
+    );
+}
+
 function StatBlock({ icon: Icon, label, value }) {
     return (
-        <div>
-            <Icon size={16} className="text-accent mb-2" />
-            <p className="font-semibold text-text text-sm">{value}</p>
-            <p className="text-xs text-text-muted">{label}</p>
+        <div className="flex items-center gap-3 py-3 sm:py-0 sm:px-6 first:sm:pl-0 last:sm:pr-0">
+            <div className="h-9 w-9 rounded-lg bg-accent/10 border border-accent/30 flex items-center justify-center shrink-0">
+                <Icon size={16} className="text-accent" />
+            </div>
+            <div>
+                <p className="font-semibold text-text text-sm">{value}</p>
+                <p className="text-xs text-text-muted">{label}</p>
+            </div>
         </div>
     );
 }

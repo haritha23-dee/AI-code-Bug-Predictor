@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowLeft, KeyRound, CheckCircle2 } from 'lucide-react';
 import { supabase } from '../../services/supabase';
+import BackToHome from '../../components/auth/BackToHome';
 
 export default function ForgotPassword() {
     const navigate = useNavigate();
@@ -73,6 +74,7 @@ export default function ForgotPassword() {
     return (
         <div className="relative min-h-screen flex items-center justify-center bg-bg text-text px-6">
             <div className="ambient-glow" />
+            <BackToHome/>
             <div className="relative z-10 w-full max-w-md">
                 <div className="glass-card rounded-3xl p-8 shadow-2xl">
                     {error && (
