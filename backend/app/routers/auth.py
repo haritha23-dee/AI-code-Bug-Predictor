@@ -75,3 +75,9 @@ def refresh_token(payload: RefreshRequest):
         response = client.auth.refresh_session(payload.refresh_token)
     except Exception:
         raise HTTPException(401, "Session expired, please login again")
+
+    return {
+        "access_token": response.session.access_token,
+        "refresh_token": response.session.refresh_token,
+        "user_id": response.user.id,
+    }

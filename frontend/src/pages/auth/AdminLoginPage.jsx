@@ -20,7 +20,11 @@ export default function AdminLoginPage() {
         setLoading(true);
         try {
             const res = await adminLogin(email, password);
+            //refresh token
+            const { scheduleExpiryWarning } = useAuth(); a
             localStorage.setItem('scrs_token', res.data.access_token);
+            localStorage.setItem('scrs_refresh_token', res.data.refresh_token);
+            scheduleExpiryWarning(res.data.access_token);
 
             const me = await authApi.getMe();
             setUser(me.data);

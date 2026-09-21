@@ -4,7 +4,7 @@ import { Mail, Lock, User, ArrowRight, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export default function SignUpPage() {
-    const { signup } = useAuth();
+    const { signup, loginWithGoogle } = useAuth();
     const navigate = useNavigate();
 
     const [name, setName] = useState('');
@@ -55,7 +55,6 @@ export default function SignUpPage() {
                             try {await loginWithGoogle();}
                             catch (err) { setError(err.message || 'Google sign-up failed'); }
                         }
-
                         }
                         className="w-full h-11 flex items-center justify-center gap-2 rounded-xl border border-border bg-bg-soft hover:bg-border/30 text-sm font-medium text-text transition mb-5"
                     >

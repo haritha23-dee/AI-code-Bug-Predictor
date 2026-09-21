@@ -13,3 +13,6 @@ export const uploadAvatar = (file) => {
         headers: { 'Content-Type': 'multipart/form-data' },
     });
 };
+
+//refresh token 
+export const refreshToken = (refresh_token) => api.post('/auth/refresh', {refresh_token});

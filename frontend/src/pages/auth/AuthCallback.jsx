@@ -7,7 +7,7 @@ import Spinner from '../../components/ui/Spinner';
 
 export default function AuthCallback() {
     const navigate = useNavigate();
-    const { setUser } = useAuth();
+    const { setUser, scheduleExpiryWarning } = useAuth();
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -20,8 +20,10 @@ export default function AuthCallback() {
                 return;
             }
 
-            const { access_token } = data.session;
+            const { access_token, refresh_token } = data.session;
             localStorage.setItem('scrs_token', access_token);
+            localStorage.setItem('scrs_refresh_token', refresh_token);
+            scheduleExpiryWarning(access_token);
 
             try {
                 const me = await authApi.getMe();
@@ -35,7 +37,7 @@ export default function AuthCallback() {
         };
 
         finishLogin();
-    }, [navigate, setUser]);
+    }, [navigate, setUser, scheduleExpiryWarning]);
 
     if (error) {
         return (
