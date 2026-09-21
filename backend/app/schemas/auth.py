@@ -16,3 +16,7 @@ class SignupRequest(BaseModel):
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str
+
+#refresh request schema setup
+class RefreshRequest(BaseModel):
+    refresh_token: str

@@ -8,6 +8,7 @@ export default function SignInPage() {
     const navigate = useNavigate();
     const location = useLocation();
     const justSignedUp = location.state?.justSignedUp;
+    const from = location.state?.from?.pathname || '/dashboard';        //redirect route for based on roles-users and admin
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -22,7 +23,8 @@ export default function SignInPage() {
         setLoading(true);
         try {
             await login(email, password);
-            navigate('/dashboard');
+            //navigate('/dashboard');
+            navigate(from, { replace: true });
         } catch (err) {
             setError(err.message || 'Login failed');
         } finally {

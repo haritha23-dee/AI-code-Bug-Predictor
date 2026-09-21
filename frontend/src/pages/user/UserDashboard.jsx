@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { FolderKanban, FileText, Plus, Sparkles } from 'lucide-react';
 import { listProjects, createProject, deleteProject } from '../../api/projects';
 import Spinner from '../../components/ui/Spinner';
+import { useLocation } from 'react-router-dom';
+import { ShieldAlert } from 'lucide-react';
 
 export default function UserDashboard() {
     const [projects, setProjects] = useState([]);
@@ -12,6 +14,8 @@ export default function UserDashboard() {
     const [newName, setNewName] = useState('');
     const [newDesc, setNewDesc] = useState('');
     const navigate = useNavigate();
+    const location = useLocation();
+    const [showUnauthorized, setShowUnauthorized] = useState(!!location.state?.unauthorized);
 
     const loadProjects = async () => {
         setLoading(true);
@@ -58,19 +62,22 @@ export default function UserDashboard() {
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between flex-wrap gap-3">
-                <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-text">Your Projects</h1>
-                    <p className="text-sm text-text-muted mt-0.5">{projects.length} total</p>
+            {showUnauthorized && (
+                <div className="flex items-center justify-between gap-3 text-sm text-orange-500 border border-orange-500/30 bg-orange-500/10 rounded-xl px-4 py-2.5">
+                    <span className="flex items-center gap-2">
+                        <ShieldAlert size={16} />
+                        You don't have permission to access that page.
+                    </span>
+                    <button
+                        onClick={() => setShowUnauthorized(false)}
+                        className="text-xs underline hover:no-underline"
+                    >
+                        Dismiss
+                    </button>
                 </div>
-                <button
-                    onClick={() => setCreating((c) => !c)}
-                    className="flex items-center gap-2 h-10 px-5 rounded-xl bg-accent hover:bg-accent-hover text-white text-sm font-medium transition shadow-[0_0_24px_-6px_var(--glow)]"
-                >
-                    <Plus size={16} />
-                    New Project
-                </button>
-            </div>
+            )}
+
+            <div className="flex items-center justify-between flex-wrap gap-3"></div>
 
             {error && (
                 <div className="text-sm text-red-500 border border-red-500/30 bg-red-500/10 rounded-xl px-4 py-2">

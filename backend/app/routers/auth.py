@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from supabase import create_client
 from app.config import settings
-from app.schemas.auth import SignupRequest, LoginRequest
+from app.schemas.auth import SignupRequest, LoginRequest, RefreshRequest #refresh token access from auth schemas
 import logging
 
 logger = logging.getLogger("brainy")
@@ -47,7 +47,8 @@ def login(payload: LoginRequest):
     except Exception as e:
         raise HTTPException(401, "Invalid credentials")
 
-    return {"access_token": response.session.access_token, "user_id": response.user.id}
+    return {"access_token": response.session.access_token, 
+            "refresh_token": response.session.refresh_token,"user_id": response.user.id}
 
 @router.post("/admin-login")
 def admin_login(payload: LoginRequest):
@@ -63,4 +64,14 @@ def admin_login(payload: LoginRequest):
     if profile.data["role"] != "admin":
         raise HTTPException(403, "Not an admin account")
 
-    return {"access_token": response.session.access_token, "user_id": response.user.id, "role": "admin"}
+    return {"access_token": response.session.access_token, 
+            "refresh_token": response.session.refresh_token,"user_id": response.user.id, "role": "admin"}
+
+#endpoint for refresh token
+@router.post("/refresh")
+def refresh_token(payload: RefreshRequest):
+    client = create_client(settings.supabase_url, settings.supabase_anon_key)
+    try:
+        response = client.auth.refresh_session(payload.refresh_token)
+    except Exception:
+        raise HTTPException(401, "Session expired, please login again")
