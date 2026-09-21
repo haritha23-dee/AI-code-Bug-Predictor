@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, ShieldCheck, Zap, Code2, AlertTriangle, Gauge, Mail } from 'lucide-react';
+import { useState } from 'react';
+import { ArrowRight, Sparkles, ShieldCheck, Zap, Code2, AlertTriangle, Gauge, Mail, Menu, X } from 'lucide-react';
 import ThemeToggle from '../components/layout/ThemeToggle';
 
 const GithubIcon = (props) => (
@@ -30,25 +31,25 @@ const GITHUB_URL = 'https://github.com/haritha23-dee/AI-code-Bug-Predictor/';
 const CONTACT_EMAIL = 'octoberfairyy@gmail.com';
 
 export default function Landing() {
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     return (
         <div className="relative min-h-screen overflow-hidden bg-bg text-text">
             <div className="ambient-glow" />
 
-            <nav className="relative z-10 flex items-center justify-between px-6 md:px-12 h-20">
+            <nav className="relative z-50 flex items-center justify-between px-6 md:px-12 h-20">
                 <div className="flex items-center gap-2">
-                    <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-accent to-accent-2 flex items-center justify-center">
-                        <Sparkles size={15} className="text-white" />
-                    </div>
+                    <img src="/brainy-logo.webp" alt="Brainy Logo" className="h-8 w-8 object-contain" />
                     <span className="font-display text-lg font-semibold tracking-tight">Brainy</span>
                 </div>
 
+                {/* Desktop Links */}
                 <div className="hidden md:flex items-center gap-8">
                     <button onClick={() => scrollToSection('features')} className="text-sm text-text-muted hover:text-text transition">Features</button>
                     <button onClick={() => scrollToSection('how-it-works')} className="text-sm text-text-muted hover:text-text transition">How it works</button>
                     <Link to="/tools" className="text-sm text-text-muted hover:text-text transition">Tools</Link>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="hidden md:flex items-center gap-3">
                     <ThemeToggle />
                     <Link to="/login" className="text-sm font-medium border border-border px-4 py-2 rounded-full hover:bg-border/30 transition">
                         Login
@@ -57,7 +58,32 @@ export default function Landing() {
                         Get Started
                     </Link>
                 </div>
+
+                <div className="md:hidden flex items-center gap-3">
+                    <ThemeToggle />
+                    <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="p-2 text-text-muted hover:text-text transition">
+                        {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
+                </div>
             </nav>
+
+            {/* Mobile Dropdown Menu */}
+            {isMobileMenuOpen && (
+                <div className="absolute top-20 left-0 w-full bg-bg/95 backdrop-blur-xl border-b border-border z-40 md:hidden animate-in slide-in-from-top-2 duration-200">
+                    <div className="flex flex-col px-6 py-6 gap-6">
+                        <button onClick={() => { scrollToSection('features'); setIsMobileMenuOpen(false); }} className="text-left text-sm font-medium text-text">Features</button>
+                        <button onClick={() => { scrollToSection('how-it-works'); setIsMobileMenuOpen(false); }} className="text-left text-sm font-medium text-text">How it works</button>
+                        <Link to="/tools" onClick={() => setIsMobileMenuOpen(false)} className="text-left text-sm font-medium text-text">Tools Integration</Link>
+                        
+                        <div className="h-px w-full bg-border" />
+                        
+                        <div className="flex flex-col gap-3">
+                            <Link to="/login" className="flex justify-center items-center h-11 rounded-xl border border-border font-medium text-sm">Login</Link>
+                            <Link to="/signup" className="flex justify-center items-center h-11 rounded-xl bg-accent text-white font-medium text-sm">Get Started</Link>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <section className="relative z-10 px-6 md:px-12 pt-14 pb-20 max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
                 <div>
@@ -197,9 +223,7 @@ export default function Landing() {
                 <div className="max-w-6xl mx-auto px-6 md:px-12 py-14 grid grid-cols-2 md:grid-cols-4 gap-10">
                     <div className="col-span-2 md:col-span-1">
                         <div className="flex items-center gap-2 mb-3">
-                            <div className="h-7 w-7 rounded-lg bg-gradient-to-br from-accent to-accent-2 flex items-center justify-center">
-                                <Sparkles size={13} className="text-white" />
-                            </div>
+                            <img src="/brainy-logo.webp" alt="Brainy Logo" className="h-7 w-7 object-contain" />
                             <span className="font-display font-semibold text-text">Brainy</span>
                         </div>
                         <p className="text-sm text-text-muted leading-relaxed max-w-xs">

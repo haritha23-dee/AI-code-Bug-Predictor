@@ -8,4 +8,4 @@ export default function Spinner({ full }) {
   );
   if (!full) return el;
   return <div className="flex items-center justify-center py-20">{el}</div>;
-} 
+}

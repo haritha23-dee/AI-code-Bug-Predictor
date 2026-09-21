@@ -2,12 +2,14 @@ import { useMemo } from 'react';
 import { Users, FolderKanban, FileCode, Activity } from 'lucide-react';
 import {
     PieChart, Pie, Cell, RadialBarChart, RadialBar, PolarAngleAxis,
-    BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
+    BarChart as RechartsBarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
 } from 'recharts';
 import { getPlatformOverview, getUserBreakdown } from '../../api/admin';
 import useAdminData from '../../hooks/useAdminData';
+import useAdminStats from '../../hooks/useAdminStats'; 
 import RefreshBar from '../../components/admin/RefreshBar';
 import Spinner from '../../components/ui/Spinner';
+import BarChart from '../../components/admin/BarChart'; 
 
 const SEVERITY = [
     { key: 'critical_bugs', label: 'Critical', color: '#ef4444' },
@@ -29,6 +31,7 @@ const round1 = (n) => Math.round(Number(n ?? 0) * 10) / 10;
 export default function AdminOverview() {
     const overview = useAdminData(getPlatformOverview);
     const users = useAdminData(getUserBreakdown);
+    const activityStats = useAdminStats(); 
 
     const topUsers = useMemo(
         () =>
@@ -43,14 +46,7 @@ export default function AdminOverview() {
     );
 
     if (overview.loading) return <Spinner full />;
-    if (overview.error && !overview.data) {
-        return (
-            <div className="text-sm text-red-500 border border-red-500/30 bg-red-500/10 rounded-xl px-4 py-2">
-                {overview.error}
-            </div>
-        );
-    }
-
+    
     const d = overview.data || {};
     const severity = SEVERITY.map((s) => ({ ...s, value: Number(d[s.key] ?? 0) }));
     const findings = severity.reduce((n, s) => n + s.value, 0);
@@ -65,7 +61,7 @@ export default function AdminOverview() {
     ];
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 pb-10">
             <RefreshBar
                 eyebrow="Mission Control"
                 title="Platform Overview"
@@ -132,7 +128,6 @@ export default function AdminOverview() {
                             </div>
                         ))}
                     </div>
-                    <p className="text-xs text-text-muted mt-3 text-center">{highRisk}% high / critical</p>
                 </Panel>
 
                 <Panel title="Average scores">
@@ -146,7 +141,7 @@ export default function AdminOverview() {
                     {topUsers.length ? (
                         <div className="h-64">
                             <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={topUsers} layout="vertical" margin={{ left: 0, right: 12 }}>
+                                <RechartsBarChart data={topUsers} layout="vertical" margin={{ left: 0, right: 12 }}>
                                     <XAxis type="number" allowDecimals={false} hide />
                                     <YAxis
                                         type="category"
@@ -158,7 +153,7 @@ export default function AdminOverview() {
                                     />
                                     <Tooltip cursor={{ fill: 'rgba(148,163,184,0.08)' }} contentStyle={tooltipStyle} itemStyle={{ color: '#e2e8f0' }} />
                                     <Bar dataKey="analyses" fill="#8b5cf6" radius={[0, 8, 8, 0]} barSize={16} />
-                                </BarChart>
+                                </RechartsBarChart>
                             </ResponsiveContainer>
                         </div>
                     ) : (
@@ -166,13 +161,23 @@ export default function AdminOverview() {
                     )}
                 </Panel>
             </div>
+
+            <Panel title="Usage Activity (Last 7 Days)" className="w-full">
+                {activityStats.loading ? (
+                    <div className="flex items-center justify-center h-[250px]">
+                        <Spinner />
+                    </div>
+                ) : (
+                    <BarChart data={activityStats.data} height={250} />
+                )}
+            </Panel>
         </div>
     );
 }
 
-function Panel({ title, children }) {
+function Panel({ title, children, className = '' }) {
     return (
-        <div className="glass-card rounded-2xl p-5">
+        <div className={`glass-card rounded-2xl p-5 ${className}`}>
             <p className="text-[11px] uppercase tracking-widest text-text-muted mb-4">{title}</p>
             {children}
         </div>

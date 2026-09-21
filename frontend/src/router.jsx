@@ -28,6 +28,8 @@ const UserHistory = lazy(() => import('./pages/user/UserHistory'));
 const AdminOverview = lazy(() => import('./pages/admin/AdminOverview'));
 const AdminUsers = lazy(() => import('./pages/admin/AdminUsers'));
 
+const NotFound = lazy(() => import('./pages/NotFound'));
+
 function PageFallback() {
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -72,7 +74,7 @@ export default function AppRouter() {
         </Route>
 
         <Route path="/unauthorized" element={<div>Not authorized</div>} />
-        <Route path="*" element={<div>404 — Page not found</div>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );
