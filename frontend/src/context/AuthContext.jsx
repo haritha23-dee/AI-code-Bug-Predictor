@@ -38,7 +38,7 @@ export function AuthProvider( {children} ){
         if(!expiryMs) return;
 
         // const warnAt = expiryMs - Date.now() - 5 * 60 * 1000;    //5 mins before expiry set thgh millisecs
-        const warnAt = 1*60*1000;
+        const warnAt = 20*60*1000;     //20 mins before expiry
 
         if (warnAt <= 0){
             handleExpiryPrompt();
@@ -50,7 +50,7 @@ export function AuthProvider( {children} ){
     //expiry prompt to users
     const handleExpiryPrompt = async() => {
         const wantsToContinue = window.confirm(
-            'Your session will expire in 1 min. Click OK to CONTINUE your session.. or CANCEL to LOG OUT now..'
+            'Your session will expire in 20 min. Click OK to CONTINUE your session.. or CANCEL to LOG OUT now..'
         );
         
         //want to continue
